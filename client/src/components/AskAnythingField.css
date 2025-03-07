@@ -1,0 +1,13 @@
+.ask-container {
+    margin-bottom: 20px;
+  }
+  
+  .ask-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
