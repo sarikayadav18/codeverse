@@ -11,7 +11,7 @@ function App() {
       <div >
         
         <Routes>
-          <Route path= "/profile" element = {<Profile />}></Route>
+          <Route path= "/profile/:username" element = {<Profile />}></Route>
           <Route path = "/" element = {<LandingPage />}></Route>
           <Route path = "/code-editor" element = {<CodeEditor />}></Route>
           <Route path="/login" element={<Login />} />

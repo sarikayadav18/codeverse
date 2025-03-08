@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Navbar.css';
 
 const Navbar = () => {
+  const [username, setUsername] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
-  const toggleDropdown = () => setShowDropdown(prev => !prev);
 
+  const toggleDropdown = () => setShowDropdown(prev => !prev);
+  
   // Check if the user is logged in by checking for a token
-  const isLoggedIn = !!localStorage.getItem('token');
+  const token = localStorage.getItem('token');
+  const isLoggedIn = !!token;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!token) return;
+      try {
+        const res = await axios.get('/api/auth/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        // Assuming the response structure is: { user: { username: '...' } }
+        setUsername(res.data.user.username);
+      } catch (err) {
+        console.error("Error fetching user in Navbar:", err);
+      }
+    };
+    fetchUser();
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -16,7 +36,9 @@ const Navbar = () => {
   };
 
   const handleProfile = () => {
-    navigate('/profile');
+    if (username) {
+      navigate(`/profile/${username}`);
+    }
   };
 
   return (
@@ -30,15 +52,17 @@ const Navbar = () => {
         )}
         {isLoggedIn && (
           <div className="avatar-container" onClick={toggleDropdown}>
-            <img 
-              src="https://via.placeholder.com/40" 
-              alt="Avatar"
-              className="avatar"
-            />
+            <div className="avatar">
+              {username ? username.charAt(0).toUpperCase() : 'U'}
+            </div>
             {showDropdown && (
               <div className="dropdown">
-                <div className="dropdown-item" onClick={handleProfile}>Profile</div>
-                <div className="dropdown-item" onClick={handleLogout}>Logout</div>
+                <div className="dropdown-item" onClick={handleProfile}>
+                  Profile
+                </div>
+                <div className="dropdown-item" onClick={handleLogout}>
+                  Logout
+                </div>
               </div>
             )}
           </div>

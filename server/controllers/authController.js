@@ -71,14 +71,37 @@ exports.getProfile = async (req, res) => {
     if (!req.user) {
       return res.status(401).json({ message: 'Not authorized' });
     }
+     req.user.password = '';
+     const user = req.user;
     // Return the user profile details (excluding sensitive fields)
     res.status(200).json({
-      username: req.user.username,
-      email: req.user.email,
+     user
       // add other fields if needed
     });
   } catch (error) {
     console.error('Error fetching profile:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+// ... existing code remains unchanged
+
+exports.getProfileByUsername = async (req, res) => {
+  try {
+    const { username } = req.params;
+    // Find the user by username (case sensitive, adjust if needed)
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+     user.password = '';
+
+    // Return only public profile details
+    res.status(200).json({
+      user// Include if intended as public information
+      // Add other public fields if needed
+    });
+  } catch (error) {
+    console.error('Error fetching profile by username:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };

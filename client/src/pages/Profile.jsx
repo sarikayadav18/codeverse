@@ -1,49 +1,104 @@
-// src/components/Profile.jsx
+// src/pages/Profile.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Profile.css';
-import DoubtCard from '../components/DoubtCard';
-import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../redux/slices/userSlice';
+import DoubtCard from '../components/DoubtCard';
+import './Profile.css';
+
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Profile = () => {
-  const [profileData, setProfileData] = useState(null);
-  const [myDoubts, setMyDoubts] = useState([]);
-  const [error, setError] = useState('');
+  const { username: visitingUsername } = useParams();
   const dispatch = useDispatch();
+  const [visitingUser, setVisitingUser] = useState(null);
+  const [doubts, setDoubts] = useState(null); // Doubts start as null instead of empty array
+  const [error, setError] = useState('');
 
+  // Get logged-in user from Redux
+  const loggedUser = useSelector((state) => state.user.user);
+
+  // Fetch logged-in user's profile using token and store in Redux
   useEffect(() => {
-    const fetchProfile = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const fetchLoggedUser = async () => {
       try {
-        const token = localStorage.getItem('token');
         const res = await axios.get('/api/auth/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setProfileData(res.data);
-        // Save profile data to Redux
-        dispatch(setUser(res.data));
+        dispatch(setUser(res.data.user));
       } catch (err) {
-        console.error('Error fetching profile:', err);
-        setError('Failed to load profile data');
+        console.error('Error fetching logged-in user:', err);
       }
     };
+    fetchLoggedUser();
+  }, [dispatch]);
 
-    const fetchMyDoubts = async () => {
+  // Fetch visiting user's profile by username
+  useEffect(() => {
+    const fetchVisitingUser = async () => {
+      try {
+        const res = await axios.get(`/api/auth/profile/${visitingUsername}`);
+        setVisitingUser(res.data.user);
+      } catch (err) {
+        console.error("Error fetching visiting user's profile:", err);
+        setError('Failed to load visiting user profile');
+      }
+    };
+    fetchVisitingUser();
+  }, [visitingUsername]);
+
+  // Fetch doubts for visiting user
+  useEffect(() => {
+    const fetchDoubts = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('/api/doubts/my', {
+        const res = await axios.get(`/api/doubts/${visitingUsername}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setMyDoubts(res.data);
+        setDoubts(res.data.length > 0 ? res.data : null); // Set null if no doubts
       } catch (err) {
-        console.error('Error fetching my doubts:', err);
-        setError('Failed to load your doubts');
+        console.error('Error fetching doubts:', err);
       }
     };
+    fetchDoubts();
+  }, [visitingUsername]);
 
-    fetchProfile();
-    fetchMyDoubts();
-  }, [dispatch]);
+  // Follow/Unfollow functionality
+  const handleFollowToggle = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const isFollowing = visitingUser.followers.some(
+        (followerId) => followerId.toString() === loggedUser._id.toString()
+      );
+
+      if (isFollowing) {
+        await axios.delete(`/api/users/${visitingUser._id}/follow`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setVisitingUser((prev) => ({
+          ...prev,
+          followers: prev.followers.filter(
+            (id) => id.toString() !== loggedUser._id.toString()
+          ),
+        }));
+      } else {
+        await axios.post(
+          `/api/users/${visitingUser._id}/follow`,
+          {},
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setVisitingUser((prev) => ({
+          ...prev,
+          followers: [...prev.followers, loggedUser._id],
+        }));
+      }
+    } catch (err) {
+      console.error('Error toggling follow:', err);
+    }
+  };
 
   if (error) {
     return (
@@ -53,7 +108,7 @@ const Profile = () => {
     );
   }
 
-  if (!profileData) {
+  if (!visitingUser) {
     return (
       <div className="profile-container">
         <p>Loading profile...</p>
@@ -61,31 +116,47 @@ const Profile = () => {
     );
   }
 
+  // Determine if the profile being visited is the logged-in user's own profile.
+  const isOwnProfile = loggedUser && loggedUser._id === visitingUser._id;
+  // Determine if current user follows visiting user.
+  const isFollowing =
+    loggedUser &&
+    visitingUser.followers.some(
+      (followerId) => followerId.toString() === loggedUser._id.toString()
+    );
+
   return (
     <div className="profile-container">
-      <h2>Profile</h2>
+      <h2>{visitingUser.username}'s Profile</h2>
       <div className="profile-info">
         <p>
-          <strong>Username:</strong> {profileData.username}
+          <strong>Username:</strong> {visitingUser.username}
         </p>
         <p>
-          <strong>Email:</strong> {profileData.email}
+          <strong>Email:</strong> {visitingUser.email}
         </p>
-        {/* Additional fields if needed */}
+        <p>
+          <strong>Followers:</strong> {visitingUser.followers.length}
+        </p>
+        <p>
+          <strong>Following:</strong> {visitingUser.following.length}
+        </p>
       </div>
-      <hr />
-      <h3>My Doubts</h3>
-      {myDoubts.length === 0 ? (
-        <p>You haven't posted any doubts yet.</p>
-      ) : (
-        myDoubts.map((doubt) => (
-          <DoubtCard key={doubt._id} doubt={doubt} refreshDoubts={() => {
-            const token = localStorage.getItem('token');
-            axios.get('/api/doubts/my', { headers: { Authorization: `Bearer ${token}` } })
-              .then((res) => setMyDoubts(res.data))
-              .catch(err => console.error(err));
-          }} />
-        ))
+
+      {!isOwnProfile && (
+        <button className="follow-btn" onClick={handleFollowToggle}>
+          {isFollowing ? 'Unfollow' : 'Follow'}
+        </button>
+      )}
+
+      {doubts !== null && doubts.length > 0 && (
+        <>
+          <hr />
+          <h3>Doubts</h3>
+          {doubts.map((doubt) => (
+            <DoubtCard key={doubt._id} doubt={doubt} refreshDoubts={() => {}} />
+          ))}
+        </>
       )}
     </div>
   );

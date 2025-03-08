@@ -1,6 +1,7 @@
 // src/components/DoubtCard.jsx
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import CodeEditorRender from './CodeEditorRender';
 import CodeEditor from './CodeEditor';
 import axios from 'axios';
@@ -91,18 +92,22 @@ const DoubtCard = ({ doubt, refreshDoubts }) => {
 
   return (
     <div className="doubt-card">
-      {/* Header with avatar and creation date */}
+      {/* Header with clickable avatar and creation date */}
       <div className="doubt-header">
         {doubt.creator && doubt.creator.avatar ? (
-          <img
-            src={doubt.creator.avatar}
-            alt={`${doubt.creator.username}'s avatar`}
-            className="avatar"
-          />
+          <Link to={`/profile/${doubt.creator.username}`}>
+            <img
+              src={doubt.creator.avatar}
+              alt={`${doubt.creator.username}'s avatar`}
+              className="avatar"
+            />
+          </Link>
         ) : (
-          <div className="avatar placeholder">
-            {doubt.creator?.username?.charAt(0).toUpperCase() || 'U'}
-          </div>
+          <Link to={`/profile/${doubt.creator?.username || 'unknown'}`}>
+            <div className="avatar placeholder">
+              {doubt.creator?.username?.charAt(0).toUpperCase() || 'U'}
+            </div>
+          </Link>
         )}
         <div className="header-info">
           <span className="username">{doubt.creator?.username || 'Unknown'}</span>
@@ -129,10 +134,10 @@ const DoubtCard = ({ doubt, refreshDoubts }) => {
           </div>
           {editError && <p className="error-message">{editError}</p>}
           {editSuccess && <p className="success-message">{editSuccess}</p>}
-          <button className="edit-btn" onClick={handleEdit}>
+          <button className="icon-btn" onClick={handleEdit}>
             <FaEdit /> Save
           </button>
-          <button className="edit-btn" onClick={() => setShowEditForm(false)}>
+          <button className="icon-btn" onClick={() => setShowEditForm(false)}>
             Cancel
           </button>
         </div>
@@ -167,16 +172,16 @@ const DoubtCard = ({ doubt, refreshDoubts }) => {
           )}
           {isCreator && (
             <div className="button-group">
-              <button className="edit-btn" onClick={() => setShowEditForm(true)}>
-                <FaEdit /> Edit
+              <button className="icon-btn" onClick={() => setShowEditForm(true)}>
+                <FaEdit />
               </button>
-              <button className="delete-btn" onClick={handleDelete}>
-                <FaTrashAlt /> Delete
+              <button className="icon-btn delete" onClick={handleDelete}>
+                <FaTrashAlt />
               </button>
             </div>
           )}
-          <button className="reply-btn" onClick={() => setShowReplyForm(!showReplyForm)}>
-            <FaReply /> Reply
+          <button className="icon-btn reply-btn" onClick={() => setShowReplyForm(!showReplyForm)}>
+            <FaReply />
           </button>
           {showReplyForm && (
             <ReplyForm onSubmit={handleReply} onCancel={() => setShowReplyForm(false)} />

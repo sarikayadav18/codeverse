@@ -121,3 +121,23 @@ exports.deleteDoubt = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+// controllers/doubtController.js
+
+exports.getDoubtByUsername = async (req, res) => {
+  try {
+    const { username } = req.params;
+    
+    // Find all doubts where the creator's username matches the provided username
+    const doubts = await Doubt.find({ 'creator.username': username });
+    
+    if (!doubts || doubts.length === 0) {
+      return res.status(404).json({ message: 'No doubts found for this user.' });
+    }
+    
+    res.status(200).json(doubts);
+  } catch (error) {
+    console.error('Error fetching doubts by username:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
