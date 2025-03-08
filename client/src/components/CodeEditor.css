@@ -1,0 +1,150 @@
+/* Main container */
+.code-editor-container {
+    width: 100%;
+    height: 100vh;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode */
+.code-editor-container.dark {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+/* Light mode */
+.code-editor-container.light {
+    background-color: #f8f8f8;
+    color: black;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* Dropdown */
+.language-select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 16px;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Buttons */
+.button {
+    padding: 8px 12px;
+    background-color: #4a4a4a;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.button:hover {
+    background-color: #6a6a6a;
+}
+
+/* Editor container */
+.editor {
+    flex-grow: 1;
+    height: 70%;
+    border: 1px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Resizer */
+.resizer {
+    height: 5px;
+    background-color: #666;
+    cursor: row-resize;
+    transition: background-color 0.2s ease;
+}
+
+.resizer:hover {
+    background-color: #888;
+}
+
+/* Output section */
+.output-section {
+    display: flex;
+    flex-grow: 1;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+/* Input and output boxes */
+.input-box,
+.output-box {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    overflow: auto;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode input/output */
+.dark .input-box,
+.dark .output-box {
+    background-color: #222;
+    color: white;
+}
+
+/* Light mode input/output */
+.light .input-box,
+.light .output-box {
+    background-color: white;
+    color: black;
+}
+
+/* Textarea inside input box */
+.input-box textarea {
+    width: 100%;
+    padding: 8px;
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    border-radius: 4px;
+    resize: none;
+    font-size: 16px;
+}
+
+/* Preformatted output */
+.output-box pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 16px;
+}
+
+/* Copy buttons */
+.copy-button {
+    padding: 6px;
+    background-color: #666;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.copy-button:hover {
+    background-color: #888;
+}
