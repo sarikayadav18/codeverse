@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import './Signup.css';
 
 // For Vite, use import.meta.env to access env variables
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -21,9 +22,8 @@ const Signup = () => {
     try {
       const res = await axios.post('/api/auth/signup', { username, email, password });
       console.log('Signup successful:', res.data);
-      // Store token locally and navigate to a protected page
       localStorage.setItem('token', res.data.token);
-      navigate('/dashboard'); // Change this to your protected route
+      navigate('/dashboard'); // Change to your protected route if necessary
     } catch (err) {
       console.error('Signup error:', err);
       setError(err.response?.data?.message || 'Signup failed');
@@ -31,10 +31,10 @@ const Signup = () => {
   };
 
   return (
-    <div>
+    <div className="signup-container">
       <h2>Signup</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={onSubmit}>
+      {error && <p className="error-message">{error}</p>}
+      <form onSubmit={onSubmit} className="signup-form">
         <div>
           <label>Username:</label>
           <input 
@@ -67,6 +67,9 @@ const Signup = () => {
         </div>
         <button type="submit">Signup</button>
       </form>
+      <p style={{ textAlign: 'center', marginTop: '15px' }}>
+        Already have an account? <Link to="/login">Login here</Link>.
+      </p>
     </div>
   );
 };

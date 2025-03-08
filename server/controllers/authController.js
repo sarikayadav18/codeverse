@@ -62,3 +62,24 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+// controllers/authController.js
+
+
+exports.getProfile = async (req, res) => {
+  try {
+    // req.user is set by your protect middleware
+    if (!req.user) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+    // Return the user profile details (excluding sensitive fields)
+    res.status(200).json({
+      username: req.user.username,
+      email: req.user.email,
+      // add other fields if needed
+    });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+

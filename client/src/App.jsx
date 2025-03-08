@@ -1,4 +1,5 @@
 import React from 'react';
+import Profile from './pages/Profile';
 import LandingPage from './pages/LandingPage';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
@@ -7,13 +8,10 @@ import CodeEditor from './components/CodeEditor';
 function App() {
   return (
     <Router>
-      <div style={{ padding: '20px' }}>
-        <nav>
-          <Link to="/login" style={{ marginRight: '10px' }}>Login</Link>
-          <Link to="/signup">Signup</Link>
-        </nav>
-        <hr />
+      <div >
+        
         <Routes>
+          <Route path= "/profile" element = {<Profile />}></Route>
           <Route path = "/" element = {<LandingPage />}></Route>
           <Route path = "/code-editor" element = {<CodeEditor />}></Route>
           <Route path="/login" element={<Login />} />

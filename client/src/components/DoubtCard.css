@@ -1,0 +1,188 @@
+/* src/components/DoubtCard.css */
+
+.doubt-card {
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 4px rgba(27, 31, 35, 0.08);
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .doubt-card:hover {
+    box-shadow: 0 4px 12px rgba(27, 31, 35, 0.15);
+  }
+  
+  /* Header with avatar and created date */
+  .doubt-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+  }
+  
+  .avatar.placeholder {
+    background: #eff3f6;
+    color: #57606a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 1px solid #d0d7de;
+  }
+  
+  .header-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .username {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #24292e;
+  }
+  
+  .created-at {
+    font-size: 0.85rem;
+    color: #57606a;
+  }
+  
+  /* Doubt content */
+  .doubt-content p {
+    font-size: 1rem;
+    color: #24292e;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  
+  /* Icon-only button styles */
+  .icon-btn {
+    background: transparent;
+    border: none;
+    color: #586069;
+    padding: 6px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .icon-btn:hover {
+    color: #0366d6;
+  }
+  
+  .icon-btn.delete {
+    color: #d73a49;
+  }
+  
+  .icon-btn.delete:hover {
+    color: #b31d28;
+  }
+  
+  /* Grouping icon buttons */
+  .button-group {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+  }
+  
+  /* Toggle button (for replies or code) styling */
+  .toggle-btn,
+  .reply-toggle-btn {
+    background: transparent;
+    border: none;
+    color: #586069;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s ease;
+  }
+  
+  .toggle-btn:hover,
+  .reply-toggle-btn:hover {
+    color: #0366d6;
+  }
+  
+  /* Replies section */
+  .replies-section {
+    border-top: 1px solid #e1e4e8;
+    padding-top: 12px;
+    margin-top: 16px;
+  }
+  
+  .replies-section h4 {
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: #24292e;
+  }
+  
+  .replies-section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .replies-section li {
+    padding: 12px 0;
+    border-bottom: 1px solid #e1e4e8;
+  }
+  
+  .replies-section li:last-child {
+    border-bottom: none;
+  }
+  
+  .replies-section li p {
+    font-size: 0.95rem;
+    color: #24292e;
+    margin-bottom: 6px;
+  }
+  
+  .replies-section li small {
+    font-size: 0.8rem;
+    color: #586069;
+  }
+  
+  /* Textarea for editing */
+  textarea {
+    width: 100%;
+    resize: vertical;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 1rem;
+    color: #24292e;
+    font-family: inherit;
+    margin-bottom: 12px;
+    transition: border-color 0.2s ease;
+  }
+  
+  textarea:focus {
+    outline: none;
+    border-color: #0366d6;
+  }
+  
+  /* Feedback messages */
+  .error-message {
+    color: #d73a49;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+  
+  .success-message {
+    color: #28a745;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+  

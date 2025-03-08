@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import './Login.css';
 
 // For Vite, use import.meta.env to access env variables
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -30,10 +31,10 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={onSubmit}>
+      {error && <p className="error-message">{error}</p>}
+      <form onSubmit={onSubmit} className="login-form">
         <div>
           <label>Email:</label>
           <input 
@@ -56,6 +57,9 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+      <p style={{ textAlign: 'center', marginTop: '15px' }}>
+        Don't have an account? <Link to="/signup">Signup here</Link>.
+      </p>
     </div>
   );
 };

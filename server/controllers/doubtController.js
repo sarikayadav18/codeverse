@@ -36,6 +36,16 @@ exports.getDoubts = async (req, res) => {
   }
 };
 
+exports.getMyDoubts = async (req, res) => {
+  try {
+    const myDoubts = await Doubt.find({ 'creator.userId': req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json(myDoubts);
+  } catch (error) {
+    console.error('Error fetching my doubts:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 exports.addReply = async (req, res) => {
   try {
     const doubtId = req.params.id;
@@ -65,6 +75,49 @@ exports.addReply = async (req, res) => {
     res.status(201).json({ message: 'Reply added successfully', doubt: updatedDoubt });
   } catch (error) {
     console.error('Error adding reply:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Update an existing doubt
+exports.updateDoubt = async (req, res) => {
+  try {
+    const doubtId = req.params.id;
+    const { text, code } = req.body;
+    // Find the doubt first
+    const doubt = await Doubt.findById(doubtId);
+    if (!doubt) return res.status(404).json({ message: 'Doubt not found' });
+    // Check if the authenticated user is the creator
+    if (doubt.creator.userId.toString() !== req.user._id.toString()) {
+      return res.status(401).json({ message: 'Not authorized to update this doubt' });
+    }
+    // Update fields
+    doubt.text = text || doubt.text;
+    doubt.code = code || doubt.code;
+    await doubt.save();
+    res.status(200).json({ message: 'Doubt updated successfully', doubt });
+  } catch (error) {
+    console.error('Error updating doubt:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Delete an existing doubt
+// controllers/doubtController.js
+
+exports.deleteDoubt = async (req, res) => {
+  try {
+    const doubtId = req.params.id;
+    const doubt = await Doubt.findById(doubtId);
+    if (!doubt) return res.status(404).json({ message: 'Doubt not found' });
+    // Only allow deletion if user is the creator
+    if (doubt.creator.userId.toString() !== req.user._id.toString()) {
+      return res.status(401).json({ message: 'Not authorized to delete this doubt' });
+    }
+    await doubt.deleteOne(); // Use deleteOne() instead of remove()
+    res.status(200).json({ message: 'Doubt deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting doubt:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };

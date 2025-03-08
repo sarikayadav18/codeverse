@@ -1,17 +1,14 @@
 // routes/doubtRoutes.js
 const express = require('express');
 const router = express.Router();
-const { createDoubt, getDoubts, addReply } = require('../controllers/doubtController');
+const { createDoubt, getDoubts, getMyDoubts, addReply, updateDoubt, deleteDoubt } = require('../controllers/doubtController');
 const protect = require('../middlewares/auth');
 
-// Create a doubt (protected)
 router.post('/', protect, createDoubt);
-
-// Get all doubts (public)
 router.get('/', getDoubts);
-
-// Add a reply to a doubt (protected)
-// The doubt id is passed as a URL parameter
+router.get('/my', protect, getMyDoubts);
 router.post('/:id/reply', protect, addReply);
+router.put('/:id', protect, updateDoubt);    // For updating a doubt
+router.delete('/:id', protect, deleteDoubt);  // For deleting a doubt
 
 module.exports = router;

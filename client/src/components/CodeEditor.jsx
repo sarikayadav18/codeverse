@@ -47,7 +47,8 @@ const CodeEditor = (props) => {
     setFontSize(fontSize + increment);
   };
 
-  const handleRunCode = async () => {
+  const handleRunCode = async (e) => {
+    e.preventDefault();
     const languageVersionMap = {
       javascript: '18.15.0',
       typescript: '5.0.3',

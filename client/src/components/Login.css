@@ -1,0 +1,77 @@
+/* Login.css - Adjusted styling for aligned email and password fields */
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .login-form div {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .login-form label {
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .login-form input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .login-form input:focus {
+    outline: none;
+    border-color: #5563DE;
+    box-shadow: 0 0 5px rgba(85, 99, 222, 0.2);
+  }
+  
+  .login-form button {
+    padding: 12px;
+    background-color: #5563DE;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-form button:hover {
+    background-color: #3f4bb8;
+  }
+  
+  .error-message {
+    color: #D8000C;
+    background: #FFBABA;
+    border: 1px solid #D8000C;
+    padding: 8px;
+    border-radius: 4px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  
